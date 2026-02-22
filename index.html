@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kraft CNC & Laser Cutting</title>
+  <meta name="description" content="Kraftcut provides precision CNC cutting and CNC laser cutting for custom parts, fabrication, and prototypes." />
+
+  <style>
+    :root{
+      --bg:#0b0f16;
+      --card:#101828;
+      --text:#eaf0ff;
+      --muted:#a7b2cc;
+      --accent:#7c5cff;
+      --accent2:#22c55e;
+      --stroke:rgba(255,255,255,.12);
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      background: radial-gradient(1200px 700px at 20% 0%, rgba(124,92,255,.22), transparent 60%),
+                  radial-gradient(1000px 700px at 85% 10%, rgba(34,197,94,.14), transparent 55%),
+                  var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+
+    /* Top nav */
+    .nav{
+      position:sticky; top:0; z-index:50;
+      backdrop-filter: blur(10px);
+      background: rgba(11,15,22,.55);
+      border-bottom:1px solid var(--stroke);
+    }
+    .nav-inner{
+      max-width:1100px;
+      margin:0 auto;
+      padding:14px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+
+    /* UPDATED brand layout */
+    .brand{
+      display:flex; align-items:center; gap:12px;
+      font-weight:800; letter-spacing:.3px;
+    }
+    .brand-logo{
+      height:40px;
+      width:auto;
+      display:block;
+      border-radius:10px;
+    }
+    .brand-text{
+      display:flex;
+      flex-direction:column;
+      line-height:1.1;
+    }
+    .brand-name{
+      font-size:16px;
+      font-weight:900;
+      letter-spacing:.2px;
+    }
+    .brand-gst{
+      font-size:11px;
+      color:var(--muted);
+      font-weight:800;
+      margin-top:4px;
+    }
+
+    .nav-links{
+      display:flex; gap:18px;
+      color:var(--muted);
+      font-weight:600;
+      font-size:14px;
+    }
+    .nav-links a:hover{color:var(--text)}
+
+    /* NEW header contact info */
+    .header-info{
+      display:flex;
+      flex-direction:column;
+      align-items:flex-end;
+      gap:3px;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:800;
+      line-height:1.2;
+    }
+    .header-info b{color:var(--text)}
+    .nav-cta{
+      display:flex; gap:10px; align-items:center;
+    }
+
+    /* Animated button */
+    .btn{
+      position:relative;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      padding:12px 16px;
+      border-radius:14px;
+      font-weight:800;
+      font-size:14px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(16,24,40,.65);
+      color:var(--text);
+      cursor:pointer;
+      transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+      overflow:hidden; /* for ripple */
+      user-select:none;
+      will-change: transform;
+    }
+    .btn:hover{
+      transform: translateY(-2px);
+      border-color: rgba(124,92,255,.5);
+      box-shadow: 0 18px 50px rgba(124,92,255,.18);
+      background: rgba(16,24,40,.85);
+    }
+    .btn:active{ transform: translateY(0px) scale(.99); }
+
+    /* Shine animation on hover */
+    .btn .shine{
+      position:absolute;
+      inset:-2px;
+      background: linear-gradient(115deg,
+        transparent 0%,
+        rgba(255,255,255,.08) 35%,
+        rgba(255,255,255,.18) 50%,
+        rgba(255,255,255,.08) 65%,
+        transparent 100%);
+      transform: translateX(-120%);
+      transition: transform .55s ease;
+      pointer-events:none;
+    }
+    .btn:hover .shine{ transform: translateX(120%); }
+
+    /* Accent button */
+    .btn.accent{
+      border-color: rgba(124,92,255,.55);
+      background: radial-gradient(120px 80px at 20% 10%, rgba(255,255,255,.18), transparent 55%),
+                  linear-gradient(135deg, rgba(124,92,255,.95), rgba(34,197,94,.75));
+      box-shadow: 0 18px 55px rgba(124,92,255,.22);
+    }
+    .btn.accent:hover{
+      box-shadow: 0 26px 80px rgba(124,92,255,.28);
+      transform: translateY(-3px);
+    }
+
+    /* Ripple */
+    .ripple{
+      position:absolute;
+      width:12px;height:12px;
+      border-radius:999px;
+      transform: translate(-50%,-50%);
+      background: rgba(255,255,255,.35);
+      animation: ripple .55s ease-out forwards;
+      pointer-events:none;
+      mix-blend-mode: screen;
+    }
+    @keyframes ripple{
+      to{opacity:0; width:340px; height:340px;}
+    }
+
+    /* Layout */
+    .wrap{max-width:1100px;margin:0 auto;padding:0 18px;}
+    .hero{
+      padding:74px 0 34px;
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:26px;
+      align-items:center;
+    }
+    .headline{
+      font-size: clamp(32px, 4.2vw, 56px);
+      line-height:1.02;
+      margin:0 0 12px;
+      letter-spacing:-.8px;
+    }
+    .sub{
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.6;
+      margin:0 0 20px;
+      max-width:60ch;
+    }
+    .badges{display:flex; flex-wrap:wrap; gap:10px; margin:0 0 18px;}
+    .badge{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(16,24,40,.6);
+      color: rgba(234,240,255,.92);
+      font-weight:700;
+      font-size:12px;
+    }
+    .hero-cta{display:flex; gap:12px; flex-wrap:wrap;}
+    .card{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(16,24,40,.55);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hero-card{
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+      min-height:260px;
+    }
+    .hero-card:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(500px 280px at 20% 20%, rgba(124,92,255,.22), transparent 60%),
+                  radial-gradient(520px 300px at 90% 10%, rgba(34,197,94,.16), transparent 55%);
+      filter: blur(0px);
+      pointer-events:none;
+    }
+    .hero-card-inner{
+      position:relative;
+      padding:18px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(11,15,22,.55);
+      display:grid;
+      gap:10px;
+    }
+    .stat-row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .stat{
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(16,24,40,.55);
+    }
+    .stat b{display:block;font-size:18px}
+    .stat span{color:var(--muted);font-size:12px;font-weight:700}
+
+    section{padding:34px 0}
+    .section-title{
+      font-size:22px;margin:0 0 10px;
+      letter-spacing:-.3px;
+    }
+    .section-sub{margin:0 0 18px;color:var(--muted);line-height:1.6}
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:14px;
+    }
+    .tile{
+      padding:16px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(16,24,40,.5);
+      transition: transform .2s ease, border-color .2s ease, background .2s ease;
+    }
+    .tile:hover{
+      transform: translateY(-3px);
+      border-color: rgba(124,92,255,.45);
+      background: rgba(16,24,40,.7);
+    }
+    .tile h3{margin:6px 0 8px;font-size:15px}
+    .tile p{margin:0;color:var(--muted);font-size:13px;line-height:1.55}
+    .icon{
+      width:36px;height:36px;border-radius:14px;
+      border:1px solid rgba(255,255,255,.16);
+      background: radial-gradient(120px 80px at 20% 10%, rgba(255,255,255,.12), transparent 55%),
+                  rgba(11,15,22,.5);
+      display:grid; place-items:center;
+      font-size:16px;
+    }
+
+    /* ✅ ADDED: Work/Portfolio image style (ONLY addition) */
+    .work-img{
+      width:100%;
+      height:180px;
+      object-fit:cover;
+      border-radius:14px;
+      margin:6px 0 10px;
+      border:1px solid rgba(255,255,255,.12);
+    }
+
+    .two{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    .panel{padding:18px}
+    .list{
+      display:grid; gap:10px; margin:12px 0 0;
+    }
+    .li{
+      display:flex; gap:10px; align-items:flex-start;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(11,15,22,.35);
+    }
+    .dot{
+      width:10px;height:10px;border-radius:999px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      margin-top:4px; flex:0 0 10px;
+    }
+    .li b{display:block;font-size:13px}
+    .li span{display:block;color:var(--muted);font-size:12px;line-height:1.5}
+
+    .contact{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    .form{
+      display:grid; gap:10px;
+    }
+    input, textarea{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(11,15,22,.35);
+      color:var(--text);
+      outline:none;
+      font-weight:650;
+    }
+    textarea{min-height:110px; resize:vertical}
+    input:focus, textarea:focus{border-color: rgba(124,92,255,.55)}
+
+    /* NEW status msg style */
+    .form-status{
+      font-size:13px;
+      font-weight:800;
+      color:var(--muted);
+      padding-top:6px;
+    }
+
+    footer{
+      padding:26px 0 40px;
+      border-top:1px solid rgba(255,255,255,.12);
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    /* Reveal animation */
+    .reveal{
+      opacity:0;
+      transform: translateY(14px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .reveal.show{
+      opacity:1;
+      transform: translateY(0px);
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .hero{grid-template-columns: 1fr; padding-top:54px}
+      .grid{grid-template-columns: repeat(2, 1fr)}
+      .two{grid-template-columns: 1fr}
+      .contact{grid-template-columns: 1fr}
+      .nav-links{display:none}
+      .header-info{display:none;}
+    }
+    @media (max-width: 520px){
+      .grid{grid-template-columns: 1fr}
+      .stat-row{grid-template-columns: 1fr}
+    }
+  </style>
+</head>
+
+<body>
+  <header class="nav">
+    <div class="nav-inner">
+
+      <!-- UPDATED: logo + GST -->
+      <a class="brand" href="#top">
+        <!-- Put your logo here -->
+        <img class="brand-logo" src="/static/logo.jpeg" alt="Kraftcut Logo" onerror="this.style.display='none'">
+        <div class="brand-text">
+          <div class="brand-name">Kraftcut Laser and CNC Solutions</div>
+          <div class="brand-gst">GST: <span id="gstNo">07EKYPS3094E1ZE</span></div>
+        </div>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#services">Services</a>
+        <a href="#why">Why Us</a>
+        <a href="#work">Work</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <!-- NEW: phone/email (and keep CTA) -->
+      <div style="display:flex;gap:14px;align-items:center;">
+        <div class="header-info">
+          <div>📞 <b id="phoneNo">+91 8375874335</b></div>
+          <div>✉ <b id="emailId">kaps.sharma1990@gmail.com</b></div>
+        </div>
+
+        <div class="nav-cta">
+          <a class="btn" href="#contact" data-ripple>
+            <span>Get Quote</span>
+            <span class="shine" aria-hidden="true"></span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <main id="top" class="wrap">
+    <section class="hero">
+      <div class="reveal">
+        <div class="badges">
+          <span class="badge">CNC Cutting</span>
+          <span class="badge">CNC Laser Cutting</span>
+          <span class="badge">Custom Fabrication</span>
+          <span class="badge">Fast Turnaround</span>
+        </div>
+
+        <h1 class="headline">Precision CNC & Laser Cutting for Custom Parts.</h1>
+        <p class="sub">
+          Kraftcut delivers accurate cuts, clean edges, and reliable turnaround for acrylic, wood,
+          MDF, and more — from prototypes to production.
+        </p>
+
+        <div class="hero-cta">
+          <a class="btn accent" href="#contact" data-ripple>
+            <span>Request a Quote</span>
+            <span class="shine" aria-hidden="true"></span>
+          </a>
+
+          <a class="btn" href="#services" data-ripple>
+            <span>Explore Services</span>
+            <span class="shine" aria-hidden="true"></span>
+          </a>
+        </div>
+      </div>
+
+      <div class="card hero-card reveal">
+        <div class="hero-card-inner">
+          <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
+            <div>
+              <div style="font-weight:900;font-size:14px;color:rgba(234,240,255,.92)">Kraftcut Capabilities</div>
+              <div style="color:var(--muted);font-size:12px;margin-top:2px;font-weight:700">CNC • Laser • Design-to-Part</div>
+            </div>
+            <div class="badge" style="border-color:rgba(124,92,255,.35)">Quality First</div>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat">
+              <b>±0.1 mm</b>
+              <span>Typical tolerance*</span>
+            </div>
+            <div class="stat">
+              <b>24–72 hrs</b>
+              <span>Common turnaround*</span>
+            </div>
+          </div>
+
+          <div class="list">
+            <div class="li">
+              <span class="dot"></span>
+              <div>
+                <b>Clean edges & minimal finishing</b>
+                <span>Optimized toolpaths & laser parameters for best results.</span>
+              </div>
+            </div>
+            <div class="li">
+              <span class="dot"></span>
+              <div>
+                <b>From CAD to cut</b>
+                <span>Send DXF/DWG/SVG or share a sketch — we can help finalize.</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="color:var(--muted);font-size:11px;font-weight:700;margin-top:4px">
+            
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="reveal">
+      <h2 class="section-title">Services</h2>
+      <p class="section-sub">Choose the right cutting method for your material, thickness, and finish needs.</p>
+
+      <div class="grid">
+        <div class="tile">
+          <div class="icon">🧰</div>
+          <h3>CNC Routing</h3>
+          <p>Wood, MDF, acrylic, PVC — smooth contours, Wooden Doors, Engraving 2D 3D, and custom shapes.</p>
+        </div>
+        <div class="tile">
+          <div class="icon">⚡</div>
+          <h3>Laser Cutting</h3>
+          <p>Sharp, clean cuts and intricate patterns for Soft Material, Name Plate, Barcode plate.</p>
+        </div>
+        <div class="tile">
+          <div class="icon">📐</div>
+          <h3>CAD / DXF Prep</h3>
+          <p>We can fix drawings, optimize nesting, and prepare files for accurate output.</p>
+        </div>
+        <div class="tile">
+          <div class="icon">🏭</div>
+          <h3>Batch Production</h3>
+          <p>Repeatable parts with consistent quality for fabrication, signage, and components.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="why" class="reveal">
+      <div class="two">
+        <div class="card panel">
+          <h2 class="section-title" style="margin-top:0">Why Kraftcut</h2>
+          <p class="section-sub" style="margin-bottom:0">
+            Built for accuracy, speed, and reliable outcomes — whether it’s one piece or a full batch.
+          </p>
+
+          <div class="list">
+            <div class="li">
+              <span class="dot"></span>
+              <div>
+                <b>Precision & consistency</b>
+                <span>Stable setups, calibrated workflow, and quality checks.</span>
+              </div>
+            </div>
+            <div class="li">
+              <span class="dot"></span>
+              <div>
+                <b>Material guidance</b>
+                <span>Recommendations on thickness, kerf, and finishing for best results.</span>
+              </div>
+            </div>
+            <div class="li">
+              <span class="dot"></span>
+              <div>
+                <b>Fast & clear communication</b>
+                <span>Quick quotes, status updates, and delivery coordination.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card panel">
+          <h2 class="section-title" style="margin-top:0">Materials (examples)</h2>
+          <p class="section-sub" style="margin-bottom:0">
+            Update this list based on what you cut most often.
+          </p>
+
+          <div class="grid" style="grid-template-columns:repeat(2,1fr);margin-top:14px">
+            <div class="tile"><h3 style="margin:0">Corian</h3><p>Mandir, Table Top, Exterior, Interior</p></div>
+            <div class="tile"><h3 style="margin:0">ACP</h3><p>Panels, jigs, custom parts</p></div>
+            <div class="tile"><h3 style="margin:0">Acrylic</h3><p>Signage, display, Name Plate, Custom Parts</p></div>
+            <div class="tile"><h3 style="margin:0">Wood / MDF</h3><p>Jali Cutting, Wall Panel 2D 3D, Door</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="work" class="reveal">
+      <h2 class="section-title">Work / Portfolio</h2>
+      <p class="section-sub">Add your photos here (before/after, cut samples, finished assemblies).</p>
+
+      <!-- ✅ UPDATED: Multi slots version with images -->
+      <div class="grid">
+        <div class="tile">
+          <img class="work-img" src="/static/work1.jpeg" alt="Project 1">
+          <h3>Door</h3>
+          <p>Custom CNC Door work.</p>
+        </div>
+        <div class="tile">
+          <img class="work-img" src="/static/work2.jpeg" alt="Project 2">
+          <h3>Mandir</h3>
+          <p>Corian Custom Mandir.</p>
+        </div>
+        <div class="tile">
+          <img class="work-img" src="/static/work3.jpeg" alt="Project 3">
+          <h3>Acrylic Number Plate</h3>
+          <p>Acrylic fabrication / signage.</p>
+        </div>
+        <div class="tile">
+          <img class="work-img" src="/static/work4.jpeg" alt="Project 4">
+          <h3>MDF Engraving</h3>
+          <p>Engraving and detailed finishing.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="reveal">
+      <div class="contact">
+        <div class="card panel">
+          <h2 class="section-title" style="margin-top:0">Get a Quote</h2>
+          <p class="section-sub">
+            Share material, thickness, quantity, and file format (DXF/DWG/SVG/PDF). You can also mention finish requirements.
+          </p>
+
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn accent" data-ripple href="https://wa.me/8375874334" target="_blank" rel="noreferrer">
+              <span>WhatsApp</span>
+              <span class="shine" aria-hidden="true"></span>
+            </a>
+            <a class="btn" data-ripple href="mailto:info@kraftcut.in">
+              <span>Email</span>
+              <span class="shine" aria-hidden="true"></span>
+            </a>
+          </div>
+
+          <div style="margin-top:14px;color:var(--muted);font-weight:700;font-size:12px;line-height:1.7">
+            📍 Location: <b style="color:var(--text)">28.403158,77.347588</b><br/>
+            🕒 Working hours: <b style="color:var(--text)">Mon–Sat, 10am–7pm</b><br/>
+            🧾 GST: <b style="color:var(--text)"><span id="gstNo2">YOUR_GST_NUMBER</span></b><br/>
+            ✉ Email: <b style="color:var(--text)"><span id="emailId2">info@kraftcut.in</span></b>
+          </div>
+        </div>
+
+        <div class="card panel">
+          <h2 class="section-title" style="margin-top:0">Quick Form</h2>
+
+          <!-- UPDATED: real submit to backend -->
+          <form id="quickForm" class="form">
+            <input name="name" placeholder="Your Name" required />
+            <input name="contact_number" placeholder="Phone Number" required />
+            <input name="emailid" placeholder="Email (optional)" />
+            <textarea name="message" placeholder="Message (material, thickness, qty, file type)"></textarea>
+
+            <button class="btn accent" type="submit" data-ripple>
+              <span>Send</span>
+              <span class="shine" aria-hidden="true"></span>
+            </button>
+
+            <div id="formStatus" class="form-status"></div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="wrap" style="padding:0 0">
+        © <span id="year"></span> Kraftcut. All rights reserved. • GST: <span id="gstNo3">YOUR_GST_NUMBER</span>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // === Put your details here ===
+    const DETAILS = {
+      gst: "07EKYPS3094E1ZE",
+      phone: "+91 8375874334",
+      email: "kaps.sharma1990@gmail.com",
+      // For WhatsApp already set above; change if needed
+    };
+
+    document.getElementById("gstNo").textContent = DETAILS.gst;
+    document.getElementById("gstNo2").textContent = DETAILS.gst;
+    document.getElementById("gstNo3").textContent = DETAILS.gst;
+
+    document.getElementById("phoneNo").textContent = DETAILS.phone;
+
+    document.getElementById("emailId").textContent = DETAILS.email;
+    document.getElementById("emailId2").textContent = DETAILS.email;
+
+    // Footer year
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Ripple on buttons
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-ripple]");
+      if(!btn) return;
+
+      const rect = btn.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const ripple = document.createElement("span");
+      ripple.className = "ripple";
+      ripple.style.left = x + "px";
+      ripple.style.top = y + "px";
+      btn.appendChild(ripple);
+
+      ripple.addEventListener("animationend", () => ripple.remove());
+    });
+
+    // Reveal-on-scroll
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) entry.target.classList.add("show");
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(".reveal").forEach(el => io.observe(el));
+
+    // === QUICK FORM: save to Neon DB + Telegram via backend ===
+    const form = document.getElementById("quickForm");
+    const statusEl = document.getElementById("formStatus");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      statusEl.textContent = "Submitting...";
+
+      const fd = new FormData(form);
+      const payload = Object.fromEntries(fd.entries());
+
+      try {
+        const res = await fetch("/api/contact", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(payload)
+        });
+
+        const out = await res.json();
+
+        if(!out.ok){
+          statusEl.textContent = "❌ Error: " + (out.error || "Failed");
+          return;
+        }
+
+        statusEl.textContent = "✅ Submitted successfully! Ref ID: " + out.id;
+        form.reset();
+      } catch (err) {
+        statusEl.textContent = "❌ Network error. Please try again.";
+      }
+    });
+  </script>
+</body>
+</html>
